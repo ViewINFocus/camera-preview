@@ -420,7 +420,11 @@ public class CameraActivity extends Fragment {
 
             frameCamContainerLayout.forceLayout();
 
-            mPreview.setCameraDisplayOrientation();
+            if (mPreview != null && mCamera != null) {
+                mPreview.setCameraDisplayOrientation();
+            } else {
+                Log.d(TAG, "mPreview or mCamera is null");
+            }
         }
     }
 

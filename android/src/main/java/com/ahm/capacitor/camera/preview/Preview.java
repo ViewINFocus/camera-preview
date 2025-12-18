@@ -103,6 +103,11 @@ class Preview extends RelativeLayout implements SurfaceHolder.Callback, TextureV
     }
 
     public void setCameraDisplayOrientation() {
+        if (mCamera == null || cameraId < 0) {
+            Log.d(TAG, "Cannot set display orientation: camera is null or cameraId is invalid");
+            return;
+        }
+
         Camera.CameraInfo info = new Camera.CameraInfo();
         int rotation = ((Activity) getContext()).getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
@@ -142,7 +147,11 @@ class Preview extends RelativeLayout implements SurfaceHolder.Callback, TextureV
             "deg from natural"
         );
         Log.d(TAG, "need to rotate preview " + displayOrientation + "deg");
-        mCamera.setDisplayOrientation(displayOrientation);
+        try {
+            mCamera.setDisplayOrientation(displayOrientation);
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Failed to set display orientation: " + e.getMessage(), e);
+        }
     }
 
     public void switchCamera(Camera camera, int cameraId) {
